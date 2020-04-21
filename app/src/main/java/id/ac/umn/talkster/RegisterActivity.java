@@ -55,10 +55,10 @@ public class RegisterActivity extends AppCompatActivity {
                 String password1=password.getText().toString();
 
                 if(TextUtils.isEmpty(username1) || TextUtils.isEmpty(email1) || TextUtils.isEmpty(password1)){
-                    Toast.makeText(RegisterActivity.this,"All field are required",Toast.LENGTH_SHORT);
+                    Toast.makeText(RegisterActivity.this,"All fields are required",Toast.LENGTH_SHORT).show();
                 }
                 else if(password1.length()<6){
-                    Toast.makeText(RegisterActivity.this,"Password must be at least 6 characters long",Toast.LENGTH_SHORT);
+                    Toast.makeText(RegisterActivity.this,"Password must be at least 6 characters long",Toast.LENGTH_SHORT).show();
                 }
                 else{
                     register(username1,email1,password1);
