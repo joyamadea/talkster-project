@@ -17,7 +17,6 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 
 import androidx.annotation.NonNull;
@@ -31,6 +30,7 @@ import androidx.viewpager.widget.ViewPager;
 import de.hdodenhof.circleimageview.CircleImageView;
 import id.ac.umn.talkster.Fragments.ChatsFragment;
 import id.ac.umn.talkster.Fragments.UsersFragment;
+import id.ac.umn.talkster.Model.User;
 
 public class MainActivity extends AppCompatActivity {
 

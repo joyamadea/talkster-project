@@ -24,7 +24,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import id.ac.umn.talkster.Adapter.UserAdapter;
 import id.ac.umn.talkster.R;
-import id.ac.umn.talkster.User;
+import id.ac.umn.talkster.Model.User;
 
 public class UsersFragment extends Fragment {
 
