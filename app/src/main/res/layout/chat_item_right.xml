@@ -22,9 +22,11 @@
             android:layout_height="wrap_content"
             android:background="@drawable/background_right"
             android:text="hello"
+            android:paddingEnd="3dp"
+            android:paddingStart="3dp"
             android:layout_alignParentEnd="true"
             android:id="@+id/show_message"
-            android:textSize="10sp"
+            android:textSize="18sp"
             android:textColor="#fff"
             android:padding="0dp"
             android:layout_alignParentRight="true"/>
