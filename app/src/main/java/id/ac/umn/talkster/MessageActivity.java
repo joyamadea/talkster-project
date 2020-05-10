@@ -44,7 +44,7 @@ public class MessageActivity extends AppCompatActivity {
     EditText text_send;
 
     MessageAdapter messageAdapter;
-    List<Chat> mChat;
+    List<Chat> mchat;
 
     RecyclerView recyclerView;
 
@@ -68,11 +68,9 @@ public class MessageActivity extends AppCompatActivity {
 //        });
 
         recyclerView = findViewById(R.id.recycler_view);
-        recyclerView.setHasFixedSize(true);
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getApplicationContext());
-        linearLayoutManager.setStackFromEnd(true);
         recyclerView.setLayoutManager(linearLayoutManager);
-
+        recyclerView.setHasFixedSize(true);
 
         profile_image = findViewById(R.id.profile_image);
         username = findViewById(R.id.username);
@@ -131,20 +129,20 @@ public class MessageActivity extends AppCompatActivity {
     }
 
     private void readMessages(final String myid, final String userid, final String imageurl){
-        mChat = new ArrayList<>();
+        mchat = new ArrayList<>();
 
         reference = FirebaseDatabase.getInstance().getReference("Chats");
         reference.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                mChat.clear();
+                mchat.clear();
                 for(DataSnapshot snapshot : dataSnapshot.getChildren()){
                     Chat chat = snapshot.getValue(Chat.class);
-                    if (chat.getReceiver().equals(myid) && chat.getSender().equals(userid)){
-                        mChat.add(chat);
+                    if (chat.getReceiver().equals(myid) && chat.getSender().equals(userid) ||
+                            chat.getReceiver().equals(userid) && chat.getSender().equals(myid)){
+                        mchat.add(chat);
                     }
-
-                    messageAdapter = new MessageAdapter(MessageActivity.this,mChat, imageurl);
+                    messageAdapter = new MessageAdapter(MessageActivity.this, mchat, imageurl);
                     recyclerView.setAdapter(messageAdapter);
                 }
             }

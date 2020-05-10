@@ -1,6 +1,7 @@
 package id.ac.umn.talkster.Adapter;
 
 import android.content.Context;
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,14 +16,15 @@ import java.util.List;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
+import id.ac.umn.talkster.MessageActivity;
 import id.ac.umn.talkster.Model.Chat;
+import id.ac.umn.talkster.Model.User;
 import id.ac.umn.talkster.R;
 
 public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.ViewHolder> {
 
     public static final int MSG_TYPE_LEFT = 0;
     public static final int MSG_TYPE_RIGHT = 1;
-
     private Context mContext;
     private List<Chat> mChat;
     private String imageurl;
@@ -38,10 +40,10 @@ public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.ViewHold
     @NonNull
     @Override
     public MessageAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        if(viewType == MSG_TYPE_RIGHT){
+        if (viewType == MSG_TYPE_RIGHT) {
             View view = LayoutInflater.from(mContext).inflate(R.layout.chat_item_right, parent, false);
             return new MessageAdapter.ViewHolder(view);
-        }else {
+        } else{
             View view = LayoutInflater.from(mContext).inflate(R.layout.chat_item_left, parent, false);
             return new MessageAdapter.ViewHolder(view);
         }
@@ -49,17 +51,17 @@ public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.ViewHold
 
     @Override
     public void onBindViewHolder(@NonNull MessageAdapter.ViewHolder holder, int position) {
-
-        Chat chat = mChat.get(position);
+        Chat chat =  mChat.get(position);
 
         holder.show_message.setText(chat.getMessage());
 
         if(imageurl.equals("default")){
             holder.profile_image.setImageResource(R.mipmap.ic_launcher);
-        } else {
+        } else{
             Glide.with(mContext).load(imageurl).into(holder.profile_image);
         }
-    }
+
+   }
 
     @Override
     public int getItemCount() {
@@ -80,12 +82,13 @@ public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.ViewHold
     }
 
     @Override
-    public int getItemViewType(int position) {
+    public int getItemViewType(int position){
         fuser = FirebaseAuth.getInstance().getCurrentUser();
-        if(mChat.get(position).getSender().equals(fuser.getUid())){
+        if (mChat.get(position).getSender().equals(fuser.getUid())){
             return MSG_TYPE_RIGHT;
         } else{
             return MSG_TYPE_LEFT;
         }
     }
 }
+
