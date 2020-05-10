@@ -3,6 +3,7 @@ package id.ac.umn.talkster;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
@@ -21,6 +22,7 @@ public class LoginActivity extends AppCompatActivity {
     private Button btnLogin;
 
     FirebaseAuth auth;
+    ProgressDialog mLoginProgress;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -29,6 +31,7 @@ public class LoginActivity extends AppCompatActivity {
 
         email=findViewById(R.id.email);
         password=findViewById(R.id.password);
+        mLoginProgress = new ProgressDialog(this);
 
         btnLogin=findViewById(R.id.btnLogin);
 
@@ -44,6 +47,10 @@ public class LoginActivity extends AppCompatActivity {
                     Toast.makeText(LoginActivity.this,"All fields are required",Toast.LENGTH_SHORT).show();
                 }
                 else{
+                    mLoginProgress.setTitle("Log In");
+                    mLoginProgress.setMessage("Please wait while we log you in :)");
+                    mLoginProgress.show();
+
                     login(email1,password1);
                 }
 

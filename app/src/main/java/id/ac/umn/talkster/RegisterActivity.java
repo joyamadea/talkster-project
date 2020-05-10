@@ -4,9 +4,11 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
+import android.util.Patterns;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -25,6 +27,7 @@ import java.util.HashMap;
 public class RegisterActivity extends AppCompatActivity {
     EditText username,email,password;
     private Button btnRegister;
+    ProgressDialog mRegisterProgress;
 
     FirebaseAuth auth;
     DatabaseReference ref;
@@ -38,7 +41,7 @@ public class RegisterActivity extends AppCompatActivity {
         email=findViewById(R.id.email);
         password=findViewById(R.id.password);
         btnRegister=findViewById(R.id.btnRegis);
-
+        mRegisterProgress = new ProgressDialog(this);
         auth=FirebaseAuth.getInstance();
 
 //        Toolbar tb=findViewById(R.id.toolbar);
@@ -60,7 +63,14 @@ public class RegisterActivity extends AppCompatActivity {
                 else if(password1.length()<6){
                     Toast.makeText(RegisterActivity.this,"Password must be at least 6 characters long",Toast.LENGTH_SHORT).show();
                 }
+                else if(!Patterns.EMAIL_ADDRESS.matcher(email1).matches()){
+                    Toast.makeText(RegisterActivity.this,"Invalid email format",Toast.LENGTH_SHORT).show();
+                }
                 else{
+
+                    mRegisterProgress.setTitle("Registering User");
+                    mRegisterProgress.setMessage("Please wait while we create your account :)");
+                    mRegisterProgress.show();
                     register(username1,email1,password1);
                 }
 
