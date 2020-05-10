@@ -16,7 +16,7 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 import id.ac.umn.talkster.MessageActivity;
 import id.ac.umn.talkster.R;
-import id.ac.umn.talkster.User;
+import id.ac.umn.talkster.Model.User;
 
 public class UserAdapter extends RecyclerView.Adapter<UserAdapter.ViewHolder> {
     private Context mContext;

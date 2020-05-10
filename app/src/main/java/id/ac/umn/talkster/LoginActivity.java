@@ -40,8 +40,8 @@ public class LoginActivity extends AppCompatActivity {
                 String email1=email.getText().toString();
                 String password1=password.getText().toString();
 
-                if(TextUtils.isEmpty(email1) || TextUtils.isEmpty(password1)){
-                    Toast.makeText(LoginActivity.this,"All field are required",Toast.LENGTH_SHORT);
+                if(email1.isEmpty() || password1.isEmpty()){
+                    Toast.makeText(LoginActivity.this,"All fields are required",Toast.LENGTH_SHORT).show();
                 }
                 else{
                     login(email1,password1);

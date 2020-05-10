@@ -17,7 +17,6 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 
 import androidx.annotation.NonNull;
@@ -31,6 +30,7 @@ import androidx.viewpager.widget.ViewPager;
 import de.hdodenhof.circleimageview.CircleImageView;
 import id.ac.umn.talkster.Fragments.ChatsFragment;
 import id.ac.umn.talkster.Fragments.UsersFragment;
+import id.ac.umn.talkster.Model.User;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -59,11 +59,23 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot){
                 User user = dataSnapshot.getValue(User.class);
-                username.setText(user.getUsername());
-                if (user.getImageURL().equals("default")){
-                    profile_image.setImageResource(R.mipmap.ic_launcher);
-                } else{
-                    Glide.with(MainActivity.this).load(user.getImageURL()).into(profile_image);
+                String username1=null;
+                String image1=null;
+                try{
+                    username1=user.getUsername();
+                    image1=user.getImageURL();
+                }
+                catch(NullPointerException ignored){
+
+                }
+                username.setText(username1);
+
+                if(image1!=null){
+                    if (image1.equals("default")){
+                        profile_image.setImageResource(R.mipmap.ic_launcher);
+                    } else{
+                        Glide.with(MainActivity.this).load(image1).into(profile_image);
+                    }
                 }
             }
 
