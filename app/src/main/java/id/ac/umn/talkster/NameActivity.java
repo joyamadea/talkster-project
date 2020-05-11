@@ -3,6 +3,7 @@ package id.ac.umn.talkster;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -60,8 +61,41 @@ public class NameActivity extends AppCompatActivity {
 
         ref.setValue(hashMap);
 
-        Toast.makeText(NameActivity.this,username,Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
+    protected void onResume()
+    {
+        super.onResume();
+
+        // Fetching the stored data
+        // from the SharedPreference
+        SharedPreferences sh
+                = getSharedPreferences("dispName",
+                0);
+
+        String s1 = sh.getString("username", "");
 
 
+        // Setting the fetched data
+        // in the EditTexts
+        username.setText(s1);
+        //age.setText(String.valueOf(a));
+    }
+    @Override
+    protected void onPause()
+    {
+        super.onPause();
+
+        // Creating a shared pref object
+        // with a file name "MySharedPref" in private mode
+        SharedPreferences sharedPreferences
+                = getSharedPreferences("dispName",
+                MODE_PRIVATE);
+        SharedPreferences.Editor myEdit
+                = sharedPreferences.edit();
+        myEdit.putString("username",
+                username.getText().toString());
+        myEdit.commit();
     }
 }

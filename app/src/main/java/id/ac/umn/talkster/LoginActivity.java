@@ -6,6 +6,7 @@ import androidx.appcompat.widget.Toolbar;
 
 import android.app.ProgressDialog;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.MenuItem;
@@ -62,6 +63,7 @@ public class LoginActivity extends AppCompatActivity {
                 String email1=email.getText().toString();
                 String password1=password.getText().toString();
 
+
                 if(email1.isEmpty() || password1.isEmpty()){
                     Toast.makeText(LoginActivity.this,"All fields are required",Toast.LENGTH_SHORT).show();
                 }
@@ -75,6 +77,41 @@ public class LoginActivity extends AppCompatActivity {
 
             }
         });
+    }
+    @Override
+    protected void onResume()
+    {
+        super.onResume();
+
+        // Fetching the stored data
+        // from the SharedPreference
+        SharedPreferences sh
+                = getSharedPreferences("MySharedPref",
+                0);
+
+        String s1 = sh.getString("email", "");
+
+
+        // Setting the fetched data
+        // in the EditTexts
+        email.setText(s1);
+        //age.setText(String.valueOf(a));
+    }
+    @Override
+    protected void onPause()
+    {
+        super.onPause();
+
+        // Creating a shared pref object
+        // with a file name "MySharedPref" in private mode
+        SharedPreferences sharedPreferences
+                = getSharedPreferences("MySharedPref",
+                MODE_PRIVATE);
+        SharedPreferences.Editor myEdit
+                = sharedPreferences.edit();
+        myEdit.putString("email",
+                email.getText().toString());
+        myEdit.commit();
     }
 
     protected void login(String email,String password){
@@ -112,4 +149,6 @@ public class LoginActivity extends AppCompatActivity {
         }
         return super.onOptionsItemSelected(item);
     }
+
+
 }
