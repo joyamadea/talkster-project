@@ -27,7 +27,6 @@ import id.ac.umn.talkster.R;
 import id.ac.umn.talkster.Model.User;
 
 public class UsersFragment extends Fragment {
-
     private RecyclerView recyclerView;
 
     private UserAdapter userAdapter;
