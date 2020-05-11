@@ -24,7 +24,6 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.PhoneAuthProvider;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-import com.hbb20.CountryCodePicker;
 
 import java.util.HashMap;
 import java.util.concurrent.TimeUnit;
@@ -34,7 +33,6 @@ public class RegisterActivity extends AppCompatActivity {
     EditText username,email,password,phoneNum;
     private Button btnRegister;
     ProgressDialog mRegisterProgress;
-    CountryCodePicker ccp;
     String number;
 
     FirebaseAuth auth;
