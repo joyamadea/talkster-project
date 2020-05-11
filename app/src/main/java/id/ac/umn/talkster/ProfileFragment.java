@@ -2,17 +2,25 @@ package id.ac.umn.talkster;
 
 import android.app.ProgressDialog;
 import android.content.ContentResolver;
+import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
+import android.provider.MediaStore;
+import android.view.ContextMenu;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.webkit.MimeTypeMap;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -55,8 +63,11 @@ public class ProfileFragment extends Fragment {
     FirebaseUser fuser;
     StorageReference storageReverence;
     private static final int IMAGE_REQUEST=1;
+    private static final int CAMERA_REQUEST=2;
     private Uri imageUri;
     private StorageTask uploadTask;
+
+    Button btnChangePp;
 
 
     //test
@@ -68,7 +79,9 @@ public class ProfileFragment extends Fragment {
         image_profile = view.findViewById(R.id.profile_image);
         username=view.findViewById(R.id.username);
 
-       storageReverence = FirebaseStorage.getInstance().getReference("uploads");
+        btnChangePp=view.findViewById(R.id.btnChangeProf);
+        registerForContextMenu(btnChangePp);
+        storageReverence = FirebaseStorage.getInstance().getReference("uploads");
 
         fuser= FirebaseAuth.getInstance().getCurrentUser();
         reference= FirebaseDatabase.getInstance().getReference("Users").child(fuser.getUid());
@@ -90,6 +103,9 @@ public class ProfileFragment extends Fragment {
             }
         });
 
+
+
+
         image_profile.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -99,6 +115,37 @@ public class ProfileFragment extends Fragment {
         return view;
 
 
+    }
+
+    @Override
+    public void onCreateContextMenu(ContextMenu menu, View v,ContextMenu.ContextMenuInfo menuInfo) {
+        if(v.getId()==R.id.btnChangeProf){getActivity().getMenuInflater().inflate(R.menu.photomenu,menu);
+        }
+    }
+
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        inflater.inflate(R.menu.photomenu, menu);
+        setHasOptionsMenu(true);
+    }
+
+    @Override
+    public boolean onContextItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.galleryInt:
+                openImage();
+                break;
+
+            case R.id.cameraInt:
+                openCamera();
+                break;
+        }
+        return super.onContextItemSelected(item);
+    }
+
+    private void openCamera() {
+        Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+        startActivityForResult(intent,CAMERA_REQUEST);
     }
 
     private void openImage() {
@@ -114,7 +161,7 @@ public class ProfileFragment extends Fragment {
     }
     private void uploadImage(){
         final ProgressDialog pd = new ProgressDialog(getContext());
-        pd.setMessage("uploading");
+        pd.setMessage("Uploading");
         pd.show();
 
         if(imageUri!=null){
@@ -142,7 +189,7 @@ public class ProfileFragment extends Fragment {
                             reference.updateChildren(map);
                             pd.dismiss();
                         }else{
-                            Toast.makeText(getContext(),"failed!",Toast.LENGTH_SHORT).show();
+                            Toast.makeText(getContext(),"Failed!",Toast.LENGTH_SHORT).show();
                             pd.dismiss();
                         }
                 }
@@ -154,7 +201,7 @@ public class ProfileFragment extends Fragment {
                 }
         });
         }else{
-            Toast.makeText(getContext(),"no image selected",Toast.LENGTH_SHORT).show();
+            Toast.makeText(getContext(),"No image selected",Toast.LENGTH_SHORT).show();
         }
     }
         @Override
@@ -164,11 +211,12 @@ public class ProfileFragment extends Fragment {
         && data!=null && data.getData()!=null){
             imageUri=data.getData();
             if(uploadTask!=null&& uploadTask.isInProgress()){
-                Toast.makeText(getContext(),"upload in progress",Toast.LENGTH_SHORT).show();
+                Toast.makeText(getContext(),"Upload in progress",Toast.LENGTH_SHORT).show();
             }else{
                 uploadImage();
             }
         }
+
     }
 }
 
