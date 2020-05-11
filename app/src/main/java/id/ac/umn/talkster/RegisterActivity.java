@@ -9,6 +9,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.Patterns;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -16,18 +17,25 @@ import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
+import com.google.android.material.textfield.TextInputLayout;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.auth.PhoneAuthProvider;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.hbb20.CountryCodePicker;
 
 import java.util.HashMap;
+import java.util.concurrent.TimeUnit;
 
 public class RegisterActivity extends AppCompatActivity {
-    EditText username,email,password;
+    TextInputLayout un,em,pw,pn;
+    EditText username,email,password,phoneNum;
     private Button btnRegister;
     ProgressDialog mRegisterProgress;
+    CountryCodePicker ccp;
+    String number;
 
     FirebaseAuth auth;
     DatabaseReference ref;
@@ -37,27 +45,32 @@ public class RegisterActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_register);
 
-        username=findViewById(R.id.username);
-        email=findViewById(R.id.email);
-        password=findViewById(R.id.password);
+        //un=findViewById(R.id.username);
+        em=findViewById(R.id.email);
+        pw=findViewById(R.id.password);
+
+        //username=un.getEditText();
+        email=em.getEditText();
+        password=pw.getEditText();
+
         btnRegister=findViewById(R.id.btnRegis);
         mRegisterProgress = new ProgressDialog(this);
         auth=FirebaseAuth.getInstance();
 
-//        Toolbar tb=findViewById(R.id.toolbar);
-//        setSupportActionBar(tb);
-//        getSupportActionBar().setTitle("Register");
-//        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        Toolbar tb=findViewById(R.id.regisToolbar);
+        setSupportActionBar(tb);
+        getSupportActionBar().setTitle("Register");
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
 
         btnRegister.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                String username1=username.getText().toString();
+                //String username1=username.getText().toString();
                 String email1=email.getText().toString();
                 String password1=password.getText().toString();
 
-                if(TextUtils.isEmpty(username1) || TextUtils.isEmpty(email1) || TextUtils.isEmpty(password1)){
+                if(TextUtils.isEmpty(email1) || TextUtils.isEmpty(password1)){
                     Toast.makeText(RegisterActivity.this,"All fields are required",Toast.LENGTH_SHORT).show();
                 }
                 else if(password1.length()<6){
@@ -67,48 +80,74 @@ public class RegisterActivity extends AppCompatActivity {
                     Toast.makeText(RegisterActivity.this,"Invalid email format",Toast.LENGTH_SHORT).show();
                 }
                 else{
-
                     mRegisterProgress.setTitle("Registering User");
                     mRegisterProgress.setMessage("Please wait while we create your account :)");
                     mRegisterProgress.show();
-                    register(username1,email1,password1);
+                    register(email1,password1);
                 }
 
             }
         });
     }
 
-    private void register(final String username, String email, String password){
+
+    private void register(final String email, String password){
         auth.createUserWithEmailAndPassword(email,password)
                 .addOnCompleteListener(new OnCompleteListener<AuthResult>() {
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         if(task.isSuccessful()){
-                            FirebaseUser fbUser=auth.getCurrentUser();
-                            String userID=fbUser.getUid();
+                            auth.getCurrentUser().sendEmailVerification()
+                                    .addOnCompleteListener(new OnCompleteListener<Void>() {
+                                        @Override
+                                        public void onComplete(@NonNull Task<Void> task) {
+                                            if(task.isSuccessful()) {
+                                                mRegisterProgress.hide();
+                                                Toast.makeText(RegisterActivity.this, "Registered succesfully. Please check your email for verification", Toast.LENGTH_LONG).show();
+//                                                FirebaseUser fbUser=auth.getCurrentUser();
+//                                                String userID=fbUser.getUid();
+//
+//                                                ref= FirebaseDatabase.getInstance().getReference("Users").child(userID);
+//
+//                                                HashMap<String, String> hashMap=new HashMap<>();
+//                                                hashMap.put("id",userID);
+//                                                hashMap.put("username",username);
+//                                                hashMap.put("imageURL","default");
+//
+//                                                ref.setValue(hashMap);
 
-                            ref= FirebaseDatabase.getInstance().getReference("Users").child(userID);
 
-                            HashMap<String, String> hashMap=new HashMap<>();
-                            hashMap.put("id",userID);
-                            hashMap.put("username",username);
-                            hashMap.put("imageURL","default");
+                                            }
+                                            else{
+                                                mRegisterProgress.hide();
+                                                Toast.makeText(RegisterActivity.this, task.getException().getMessage(), Toast.LENGTH_LONG).show();
+                                            }
+                                        }
+                                    });
 
-                            ref.setValue(hashMap).addOnCompleteListener(new OnCompleteListener<Void>() {
-                                @Override
-                                public void onComplete(@NonNull Task<Void> task) {
-                                    if(task.isSuccessful()){
-                                        Intent i = new Intent(RegisterActivity.this,MainActivity.class);
-                                        startActivity(i);
-                                        finish();
-                                    }
-                                }
-                            });
                         }
                         else{
+                            mRegisterProgress.hide();
                             Toast.makeText(RegisterActivity.this,"Register failed",Toast.LENGTH_SHORT).show();
                         }
                     }
                 });
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                this.finish();
+                return true;
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public void onBackPressed() {
+        Intent i=new Intent(RegisterActivity.this,StartActivity.class);
+        startActivity(i);
+        finish();
     }
 }

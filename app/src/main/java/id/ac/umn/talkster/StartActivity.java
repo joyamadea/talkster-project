@@ -14,14 +14,17 @@ public class StartActivity extends AppCompatActivity {
     Button btnLogin,btnRegis;
 
     FirebaseUser firebaseUser;
+    FirebaseAuth auth;
 
     @Override
     protected void onStart() {
         super.onStart();
 
+        auth=FirebaseAuth.getInstance();
+
         firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
 
-        if (firebaseUser != null){
+        if (firebaseUser != null && auth.getCurrentUser().isEmailVerified()){
             Intent intent = new Intent(StartActivity.this, MainActivity.class);
             startActivity(intent);
             finish();
