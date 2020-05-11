@@ -13,6 +13,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -29,6 +30,7 @@ import java.util.HashMap;
 public class LoginActivity extends AppCompatActivity {
     TextInputLayout em,pw;
     EditText email,password;
+    TextView forgotPassword;
     private Button btnLogin;
 
     FirebaseAuth auth;
@@ -54,6 +56,14 @@ public class LoginActivity extends AppCompatActivity {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         btnLogin=findViewById(R.id.btnLogin);
+        forgotPassword=findViewById(R.id.forgotPassword);
+
+        forgotPassword.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View view){
+                startActivity(new Intent(LoginActivity.this,ResetPasswordActivity.class));
+            }
+        });
 
         auth=FirebaseAuth.getInstance();
 
