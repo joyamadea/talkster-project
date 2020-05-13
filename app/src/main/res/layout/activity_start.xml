@@ -4,15 +4,16 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/colorPrimaryDark"
+    android:background="@color/colorPrimary"
     android:orientation="vertical"
     tools:context=".StartActivity">
 
-    <androidx.appcompat.widget.AppCompatImageView
-        android:layout_width="match_parent"
-        android:layout_height="418dp"
-        app:srcCompat="@drawable/mouth" />
 
+    <androidx.appcompat.widget.AppCompatImageView
+        android:layout_width="332dp"
+        android:layout_height="339dp"
+        android:layout_gravity="center"
+        app:srcCompat="@drawable/lips" />
 
     <TextView
         android:id="@+id/talkster"

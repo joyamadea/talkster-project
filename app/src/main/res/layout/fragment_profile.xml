@@ -32,11 +32,33 @@
                 android:layout_marginTop="50dp"
                 android:src="@mipmap/ic_launcher" />
 
+            <Button
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/btnChangeProf"
+                android:text="Change Profile Picture"
+                android:layout_below="@id/profile_image"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="15dp"
+                android:textSize="18sp"
+                tools:ignore="NotSibling" />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/justtext"
+                android:text="Long press to change profile picture"
+                android:layout_below="@id/profile_image"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="60dp"
+                android:textColor="@color/colorPrimary"
+                android:textSize="12sp"
+                tools:ignore="NotSibling" />
+
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:id="@+id/username"
-                android:text="username"
+
                 android:layout_below="@id/profile_image"
                 android:layout_centerHorizontal="true"
                 android:layout_marginTop="150dp"
